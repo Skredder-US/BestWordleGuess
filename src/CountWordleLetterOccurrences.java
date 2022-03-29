@@ -11,6 +11,10 @@ import java.util.Scanner;
  * 		eg. : "Sores" is the most coincident word when only considering same
  * 			  letters in the same location
  * 
+ * results: "sanes" (doesn't seem right -- because i dunno if wordle solutions
+ * are plural.) but with a score of 74405 it wins!
+ * 
+ *  Note: NO solutions are plural... will need to remove those words from list!
  */
 public class CountWordleLetterOccurrences {
 
@@ -30,37 +34,35 @@ public class CountWordleLetterOccurrences {
 			}
 		}
 		
-		// print results
-		System.out.println(Arrays.toString(letterCount));
+		// Reiterate through the list and find the most coicident Wordle word
 		
-//		// Reiterate through the list and find the word with the most common 
-//		// letters for each position
-//		
-//		// quick redo of File and rescan b/c easy
-//		listScan = new Scanner(new File("src/Wordle Word List.txt"));
-//		
-//		String curBestWord = "";
-//		int curOccurrenceCountMax = 0;
-//		while (listScan.hasNext()) {
-//			String curWord = listScan.next();
-//			
-//			// sum the occurrence counts for the letters in this word at each
-//			// index
-//			int curOccurrenceCountSum = 0;
-//			for (int i = 0; i < curWord.length(); i++) {
-//				curOccurrenceCountSum +=
-//						letterAndLocationCount[i][curWord.charAt(i) - 'a'];
-//			}
-//			
-//			// set this as best word if occurrence counts is largest.
-//			if (curOccurrenceCountSum > curOccurrenceCountMax) {
-//				curBestWord = curWord;
-//				curOccurrenceCountMax = curOccurrenceCountSum;
-//			}
-//		}
-//		
-//		// Print results
-//		System.out.println(curBestWord + ": " + curOccurrenceCountMax);
+		// quick redo of File and rescan b/c easy
+		listScan = new Scanner(new File("src/Wordle Word List.txt"));
+		
+		String bestWord = "";
+		int scoreMax = 0;
+		while (listScan.hasNext()) {
+			String curWord = listScan.next();
+			
+			// sum the occurrence counts for the letters in this word at each
+			// index
+			int curScore = 0;
+			for (int i = 0; i < curWord.length(); i++) {
+				int letterIndex = curWord.charAt(i) - 'a';
+				
+				curScore += 5 * letterAndLocationCount[i][letterIndex];
+				curScore += letterCount[letterIndex];
+			}
+			
+			// set this as best word if occurrence counts is largest.
+			if (curScore > scoreMax) {
+				bestWord = curWord;
+				scoreMax = curScore;
+			}
+		}
+		
+		// Print results
+		System.out.println(bestWord + ": " + scoreMax);
 	}
 
 }

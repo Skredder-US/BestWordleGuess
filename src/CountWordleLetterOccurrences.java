@@ -5,27 +5,31 @@ import java.util.Scanner;
 
 /*
  * The Wordle words list has 10663 words! 
+ * No Wordle solutions are plural!
  * 
  * Finds the most coincident word in the Wordle words list.
  * 
- * 		eg. : "Sores" is the most coincident word when only considering same
- * 			  letters in the same location
+ * Results: "Saree" but that has a double 'e' which is not worth guess (this is
+ * harder than I thought -- but don't worry I have a plan.)
  * 
- * results: "sanes" (doesn't seem right -- because i dunno if wordle solutions
- * are plural.) but with a score of 74405 it wins!
+ * Note: I also don't know "saree". I'm just printing out all the letters to 
+ * see if I can make a word that includes the majority letters.
  * 
- *  Note: NO solutions are plural... will need to remove those words from list!
  */
 public class CountWordleLetterOccurrences {
 
 	public static void main(String[] args) throws FileNotFoundException {
-		// Iterate through the list and count each letter in each index
+		// Iterate through the list and count each letter in each index and each
+		// letter of all non-plural Wordle words.
 		Scanner listScan = new Scanner(new File("src/Wordle Word List.txt"));
 		
 		int[][] letterAndLocationCount = new int[5][26]; // 5 indices, 26 letters
 		int[] letterCount = new int[26];
 		while (listScan.hasNext()) {
 			String curWord = listScan.next();
+			if (curWord.endsWith("s")) {
+				continue;
+			}
 			
 			for (int i = 0; i < curWord.length(); i++) { 
 				int letterIndex = curWord.charAt(i) - 'a';

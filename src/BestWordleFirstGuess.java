@@ -1,22 +1,19 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /*
  * The Wordle words list has 10663 words! 
  * No Wordle solutions are plural!
+ * Good guesses have no duplicate letters? (e.g. saree)
  * 
- * Finds the most coincident word in the Wordle words list.
+ * Finds the most coincident word in the Wordle words list. (note: skipping words
+ * with repeat letters.) 
  * 
- * Results: "Saree" but that has a double 'e' which is not worth guess (this is
- * harder than I thought -- but don't worry I have a plan.)
- * 
- * Note: I also don't know "saree". I'm just printing out all the letters to 
- * see if I can make a word that includes the majority letters.
- * 
+ * Results: "Sared". Finally! maybe this is a good first guess (without removing
+ * previous solutions.) 
  */
-public class CountWordleLetterOccurrences {
+public class BestWordleFirstGuess {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// Iterate through the list and count each letter in each index and each
@@ -47,6 +44,22 @@ public class CountWordleLetterOccurrences {
 		int scoreMax = 0;
 		while (listScan.hasNext()) {
 			String curWord = listScan.next();
+			
+			// skip words with double letters
+			int[] curLetterCount = new int[26];
+			boolean skip = false;
+			for (int i = 0; i < curWord.length(); i++) {
+				int letterIndex = curWord.charAt(i) - 'a';
+				
+				if (curLetterCount[letterIndex] > 0) {
+					skip = true;
+				} else {
+					curLetterCount[letterIndex]++;
+				}
+			}
+			if (skip) {
+				continue;
+			}
 			
 			// sum the occurrence counts for the letters in this word at each
 			// index

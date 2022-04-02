@@ -8,6 +8,9 @@ import java.util.Scanner;
  * by Taylor Juve
  * 
  * 6741 non-plural wordle words out of 10663 total.
+ * 
+ * Attempts a deep sum to determine the sum of all words that contain 
+ * letters as the first letter (and so on.)
  */
 public class WordleBestGuess {
 
@@ -41,13 +44,16 @@ public class WordleBestGuess {
 			return 0;
 		}
 		
+		int sum = 0;
 		for (int i = 0; i < words.size(); i++) {
-			String word = words.remove(i);
+			String word = words.get(i);
 			if (containsLetter(guess, word)) {
-				return 1 + count(word, words);
-			}
+				words.remove(i);
+				sum += 1 + count(word, new ArrayList<String>(words));
+				words.add(i, word);
+			} 
 		}
-		return 0;
+		return sum;
 	}
 	
 	// True if any letters match between guess and word
